@@ -92,3 +92,14 @@ git_override(
     remote = "https://github.com/eclipse-score/kyron.git",
     commit = "c5837ac6612a5ebf91cd016775f2d3ee85ed6892",
 )
+
+bazel_dep(name = "score_lifecycle_health")
+git_override(
+    module_name = "score_lifecycle_health",
+    remote = "https://github.com/eclipse-score/lifecycle.git",
+    commit = "4f63303bdf62b270c118a58dd047197a79a9dc5f",
+    patches = [
+        "//patches/ipc_dropin:0001-fix-ipc_dropin-build.patch",
+    ],
+    patch_strip = 1,
+)

@@ -30,3 +30,25 @@ rpm_package(
     summary = "LOLA Demo",
     version = "1.0.0",
 )
+
+rpm_package(
+    name = "lifecycle-demo",
+    binaries = [
+        "@score_lifecycle_health//src/launch_manager_daemon:launch_manager",
+        "@score_lifecycle_health//examples/cpp_supervised_app:cpp_supervised_app",
+        "@score_lifecycle_health//examples/cpp_lifecycle_app:cpp_lifecycle_app",
+        "@score_lifecycle_health//examples/rust_supervised_app:rust_supervised_app",
+        "@score_lifecycle_health//examples/control_application:control_daemon",
+        "@score_lifecycle_health//examples/control_application:lmcontrol",
+    ],
+    config_dir = "/etc/score-lifecycle-health",
+    description = "Eclipse SCORE Lifecycle Health components including Health Monitor and Launch Manager.",
+    libraries = [
+        "@score_lifecycle_health//src/launch_manager_daemon/process_state_client_lib:process_state_client",
+        "@score_lifecycle_health//src/launch_manager_daemon/lifecycle_client_lib:lifecycle_client",
+        "@score_lifecycle_health//src/control_client_lib:control_client_lib",
+        "@score_lifecycle_health//src/launch_manager_daemon/health_monitor_lib:hm_shared_lib",
+    ],
+    summary = "Eclipse SCORE Lifecycle Health Demo",
+    version = "1.0.0",
+)

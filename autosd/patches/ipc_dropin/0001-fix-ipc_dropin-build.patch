@@ -1,0 +1,12 @@
+diff --git a/externals/ipc_dropin/BUILD b/externals/ipc_dropin/BUILD
+index 146b3c5..2cfe80c 100644
+--- a/externals/ipc_dropin/BUILD
++++ b/externals/ipc_dropin/BUILD
+@@ -2,7 +2,6 @@ cc_library(
+     name = "ipc_dropin_internal",
+     hdrs = glob(["include/ipc_dropin/*.hpp"]),
+     includes = ["include"],
+-    strip_include_prefix = "include",
+     visibility = ["//visibility:public"],
+ )
+ 

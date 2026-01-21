@@ -11,6 +11,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 load("@rules_rpm//rpm:defs.bzl", "rpm_package")
+load("//:lifecycle_helpers.bzl", "lifecycle_py_flatbuffer_library")
+
+lifecycle_py_flatbuffer_library()
 
 rpm_package(
     name = "lola-demo",

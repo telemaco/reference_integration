@@ -1,32 +1,36 @@
-diff --git a/src/launch_manager_daemon/config/BUILD b/src/launch_manager_daemon/config/BUILD
-new file mode 100644
-index 0000000..a624d27
---- /dev/null
-+++ b/src/launch_manager_daemon/config/BUILD
-@@ -0,0 +1,7 @@
-+package(default_visibility = ["//visibility:public"])
+diff --git a/src/launch_manager_daemon/BUILD b/src/launch_manager_daemon/BUILD
+index e82e4a5..4e32b6b 100644
+--- a/src/launch_manager_daemon/BUILD
++++ b/src/launch_manager_daemon/BUILD
+@@ -48,3 +48,10 @@ cc_binary_with_common_opts(
+         "@score_baselibs//score/result",
+     ],
+ )
 +
 +filegroup(
 +    name = "lm_flatcfg_fbs",
-+    srcs = ["lm_flatcfg.fbs"],
++    srcs = ["config/lm_flatcfg.fbs"],
 +    visibility = ["//visibility:public"],
 +)
-diff --git a/src/launch_manager_daemon/health_monitor_lib/config/BUILD b/src/launch_manager_daemon/health_monitor_lib/config/BUILD
-new file mode 100644
-index 0000000..857cd0e
---- /dev/null
-+++ b/src/launch_manager_daemon/health_monitor_lib/config/BUILD
-@@ -0,0 +1,13 @@
-+package(default_visibility = ["//visibility:public"])
++
+diff --git a/src/launch_manager_daemon/health_monitor_lib/BUILD b/src/launch_manager_daemon/health_monitor_lib/BUILD
+index 3f699d3..8b4ceb7 100644
+--- a/src/launch_manager_daemon/health_monitor_lib/BUILD
++++ b/src/launch_manager_daemon/health_monitor_lib/BUILD
+@@ -313,3 +313,16 @@ cc_library_with_common_opts(
+     ],
+     alwayslink = True,
+ )
 +
 +filegroup(
 +    name = "hm_flatcfg_fbs",
-+    srcs = ["hm_flatcfg.fbs"],
++    srcs = ["config/hm_flatcfg.fbs"],
 +    visibility = ["//visibility:public"],
 +)
 +
 +filegroup(
 +    name = "hmcore_flatcfg_fbs",
-+    srcs = ["hmcore_flatcfg.fbs"],
++    srcs = ["config/hmcore_flatcfg.fbs"],
 +    visibility = ["//visibility:public"],
 +)
++

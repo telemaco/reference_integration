@@ -11,9 +11,21 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 load("@rules_rpm//rpm:defs.bzl", "rpm_package")
-load("//:lifecycle_helpers.bzl", "lifecycle_py_flatbuffer_library")
+load("//:lifecycle_helpers.bzl", "generate_lifecycle_demo_files")
 
-lifecycle_py_flatbuffer_library()
+LIFECYCLE_PROCESS_GROUPS = {
+    "MainPG": {
+        "process_num": 10,
+    },
+    "SecondaryPG": {
+        "process_num": 10,
+    },
+    "SafetyCriticalPG": {
+        "process_num": 10,
+    }
+}
+
+generate_lifecycle_demo_files(process_groups = LIFECYCLE_PROCESS_GROUPS)
 
 rpm_package(
     name = "lola-demo",
@@ -45,6 +57,9 @@ rpm_package(
         "@score_lifecycle_health//examples/control_application:lmcontrol",
     ],
     config_dir = "/etc/score-lifecycle-health",
+    configs = [
+        "//:all_health_monitor_process_cfg_bins",
+    ],
     description = "Eclipse SCORE Lifecycle Health components including Health Monitor and Launch Manager.",
     libraries = [
         "@score_lifecycle_health//src/launch_manager_daemon/process_state_client_lib:process_state_client",

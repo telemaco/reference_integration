@@ -147,3 +147,61 @@ def generate_lifecycle_py_bindings():
 def generate_lifecycle_demo_files(process_groups):
     generate_lifecycle_py_bindings()
     gen_health_monitor_process_cfg(process_groups)
+    generate_hm_configs(process_groups)
+
+
+def _process_groups_to_json_str(process_groups):
+    items = []
+    for pg, data in process_groups.items():
+        items.append('"%s": {"process_num": %d}' % (pg, data["process_num"]))
+    return "{%s}" % ", ".join(items)
+
+
+def generate_hm_configs(process_groups):
+    """Generates hm_demo.bin and hm_demo.json."""
+
+    # py_binary for the new script
+    py_binary(
+        name = "gen_health_monitor_cfg_py",
+        srcs = ["scripts/lifecycle/gen_health_monitor_cfg.py"],
+        deps = [
+            ":lifecycle_fbs_py_bindings",
+            "@pip_autosd_venv_test//flatbuffers",
+        ],
+        main = "gen_health_monitor_cfg.py",
+        visibility = ["//visibility:public"],
+    )
+
+    # genrule to create hm_demo.bin
+    native.genrule(
+        name = "generate_hm_configs_rule",
+        outs = ["hm_demo.bin"],
+        cmd = "$(location :gen_health_monitor_cfg_py) $@ --process-groups '{}'".format(_process_groups_to_json_str(process_groups)),
+        tools = [":gen_health_monitor_cfg_py"],
+        visibility = ["//visibility:public"],
+    )
+
+    native.filegroup(
+        name = "hm_demo_bin",
+        srcs = [":hm_demo.bin"],
+        visibility = ["//visibility:public"],
+    )
+
+    # genrule to create hm_demo.json from hm_demo.bin
+    native.genrule(
+        name = "generate_hm_configs_json_rule",
+        srcs = [
+            ":generate_hm_configs_rule",
+            "@score_lifecycle_health//src/launch_manager_daemon/health_monitor_lib:hm_flatcfg_fbs",
+        ],
+        outs = ["hm_demo.json"],
+        cmd = "$(location @flatbuffers//:flatc) --json --defaults-json --raw-binary -o $(@D) $(location @score_lifecycle_health//src/launch_manager_daemon/health_monitor_lib:hm_flatcfg_fbs) -- $(location :generate_hm_configs_rule)",
+        tools = ["@flatbuffers//:flatc"],
+        visibility = ["//visibility:public"],
+    )
+
+    native.filegroup(
+        name = "hm_demo_json",
+        srcs = [":hm_demo.json"],
+        visibility = ["//visibility:public"],
+    )

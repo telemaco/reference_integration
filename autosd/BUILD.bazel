@@ -59,6 +59,7 @@ rpm_package(
     config_dir = "/etc/score-lifecycle-health",
     configs = [
         "//:all_health_monitor_process_cfg_bins",
+        "//:hm_demo_bin",
     ],
     description = "Eclipse SCORE Lifecycle Health components including Health Monitor and Launch Manager.",
     libraries = [

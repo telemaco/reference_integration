@@ -149,6 +149,7 @@ def generate_lifecycle_demo_files(process_groups):
     gen_health_monitor_process_cfg(process_groups)
     generate_hm_configs(process_groups)
     generate_lm_config(process_groups)
+    generate_hm_core_config()
 
 
 def _process_groups_to_json_str(process_groups):
@@ -253,5 +254,55 @@ def generate_hm_configs(process_groups):
     native.filegroup(
         name = "hm_demo_json",
         srcs = [":hm_demo.json"],
+        visibility = ["//visibility:public"],
+    )
+
+
+def generate_hm_core_config():
+    """Generates hmcore.bin and hmcore.json."""
+
+    # py_binary for the new script
+    py_binary(
+        name = "gen_health_monitor_core_cfg_py",
+        srcs = ["scripts/lifecycle/gen_health_monitor_core_cfg.py"],
+        deps = [
+            ":lifecycle_fbs_py_bindings",
+            "@pip_autosd_venv_test//flatbuffers",
+        ],
+        main = "gen_health_monitor_core_cfg.py",
+        visibility = ["//visibility:public"],
+    )
+
+    # genrule to create hmcore.bin
+    native.genrule(
+        name = "generate_hm_core_config_rule",
+        outs = ["hmcore.bin"],
+        cmd = "$(location :gen_health_monitor_core_cfg_py) $@",
+        tools = [":gen_health_monitor_core_cfg_py"],
+        visibility = ["//visibility:public"],
+    )
+
+    native.filegroup(
+        name = "hmcore_bin",
+        srcs = [":hmcore.bin"],
+        visibility = ["//visibility:public"],
+    )
+
+    # genrule to create hmcore.json from hmcore.bin
+    native.genrule(
+        name = "generate_hm_core_config_json_rule",
+        srcs = [
+            ":generate_hm_core_config_rule",
+            "@score_lifecycle_health//src/launch_manager_daemon/health_monitor_lib:hmcore_flatcfg_fbs",
+        ],
+        outs = ["hmcore.json"],
+        cmd = "$(location @flatbuffers//:flatc) --json --defaults-json --raw-binary -o $(@D) $(location @score_lifecycle_health//src/launch_manager_daemon/health_monitor_lib:hmcore_flatcfg_fbs) -- $(location :generate_hm_core_config_rule)",
+        tools = ["@flatbuffers//:flatc"],
+        visibility = ["//visibility:public"],
+    )
+
+    native.filegroup(
+        name = "hmcore_json",
+        srcs = [":hmcore.json"],
         visibility = ["//visibility:public"],
     )

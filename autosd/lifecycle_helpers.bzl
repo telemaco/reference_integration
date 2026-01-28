@@ -148,6 +148,7 @@ def generate_lifecycle_demo_files(process_groups):
     generate_lifecycle_py_bindings()
     gen_health_monitor_process_cfg(process_groups)
     generate_hm_configs(process_groups)
+    generate_lm_config(process_groups)
 
 
 def _process_groups_to_json_str(process_groups):
@@ -155,6 +156,55 @@ def _process_groups_to_json_str(process_groups):
     for pg, data in process_groups.items():
         items.append('"%s": {"process_num": %d}' % (pg, data["process_num"]))
     return "{%s}" % ", ".join(items)
+
+
+def generate_lm_config(process_groups):
+    """Generates lm_demo.bin and lm_demo.json."""
+
+    py_binary(
+        name = "gen_launch_manager_cfg_py",
+        srcs = ["scripts/lifecycle/gen_launch_manager_cfg.py"],
+        deps = [
+            ":lifecycle_fbs_py_bindings",
+            "@pip_autosd_venv_test//flatbuffers",
+        ],
+        main = "gen_launch_manager_cfg.py",
+        visibility = ["//visibility:public"],
+    )
+
+    # genrule to create lm_demo.bin
+    native.genrule(
+        name = "generate_lm_config_rule",
+        outs = ["lm_demo.bin"],
+        cmd = "$(location :gen_launch_manager_cfg_py) $@ --process-groups '{}'".format(_process_groups_to_json_str(process_groups)),
+        tools = [":gen_launch_manager_cfg_py"],
+        visibility = ["//visibility:public"],
+    )
+
+    native.filegroup(
+        name = "lm_demo_bin",
+        srcs = [":lm_demo.bin"],
+        visibility = ["//visibility:public"],
+    )
+
+    # genrule to create lm_demo.json from lm_demo.bin
+    native.genrule(
+        name = "generate_lm_config_json_rule",
+        srcs = [
+            ":generate_lm_config_rule",
+            "@score_lifecycle_health//src/launch_manager_daemon:lm_flatcfg_fbs",
+        ],
+        outs = ["lm_demo.json"],
+        cmd = "$(location @flatbuffers//:flatc) --json --defaults-json --raw-binary -o $(@D) $(location @score_lifecycle_health//src/launch_manager_daemon:lm_flatcfg_fbs) -- $(location :generate_lm_config_rule)",
+        tools = ["@flatbuffers//:flatc"],
+        visibility = ["//visibility:public"],
+    )
+
+    native.filegroup(
+        name = "lm_demo_json",
+        srcs = [":lm_demo.json"],
+        visibility = ["//visibility:public"],
+    )
 
 
 def generate_hm_configs(process_groups):

@@ -62,6 +62,7 @@ rpm_package(
         "//:hm_demo_bin",
         "//:lm_demo_bin",
         "//:hmcore_bin",
+        "//files/lifecycle/launch_manager:lm_logging_file",
     ],
     description = "Eclipse SCORE Lifecycle Health components including Health Monitor and Launch Manager.",
     libraries = [

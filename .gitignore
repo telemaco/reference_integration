@@ -27,3 +27,8 @@ __pycache__/
 /score_*/
 /.gita/
 /.gita-workspace.csv
+
+# AutoSD
+autosd/build/rpms
+autosd/build/scripts/automotive-image-builder
+autosd/build/*.qcow2

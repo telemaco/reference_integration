@@ -1,0 +1,39 @@
+diff --git a/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/FlatCfgFactory.cpp b/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/FlatCfgFactory.cpp
+index ea8cbf3..6913912 100644
+--- a/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/FlatCfgFactory.cpp
++++ b/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/FlatCfgFactory.cpp
+@@ -50,7 +50,7 @@ namespace
+ static constexpr char const* kLogPrefix{"Factory for FlatCfg AR24-11:"};
+ 
+ std::unique_ptr<char[]> read_flatbuffer_file(const std::string& f_filename_r) {
+-    const std::string configFilePath = std::string("etc/") + f_filename_r.c_str();
++    const std::string configFilePath = std::string("/etc/eclipse-score/lifecycle/") + f_filename_r.c_str();
+ 
+     std::ifstream infile;
+     infile.open(configFilePath, std::ios::binary | std::ios::in);
+diff --git a/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/MachineConfigFactory.cpp b/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/MachineConfigFactory.cpp
+index a20c14b..5afc8b5 100644
+--- a/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/MachineConfigFactory.cpp
++++ b/src/launch_manager_daemon/health_monitor_lib/src/score/lcm/saf/factory/MachineConfigFactory.cpp
+@@ -50,7 +50,7 @@ void updateNonDefaultValue(std::uint16_t& f_field_r, const std::uint16_t f_value
+ }
+ 
+ std::unique_ptr<char[]> read_flatbuffer_file(const std::string& f_filename_r) {
+-    const std::string configFilePath = std::string("etc/") + f_filename_r.c_str();
++    const std::string configFilePath = std::string("/etc/eclipse-score/lifecycle/") + f_filename_r.c_str();
+ 
+     std::ifstream infile;
+     infile.open(configFilePath, std::ios::binary | std::ios::in);
+diff --git a/src/launch_manager_daemon/src/configuration_manager/configurationmanager.cpp b/src/launch_manager_daemon/src/configuration_manager/configurationmanager.cpp
+index a3279e1..6a92e63 100644
+--- a/src/launch_manager_daemon/src/configuration_manager/configurationmanager.cpp
++++ b/src/launch_manager_daemon/src/configuration_manager/configurationmanager.cpp
+@@ -46,7 +46,7 @@ bool setResourceLimits(const LMFlatBuffer::ProcessStartupConfig& startup_config_
+ }
+ 
+ std::unique_ptr<char[]> read_flatbuffer_file(const std::string& f_filename_r) {
+-    const std::string configFilePath = std::string("etc/") + f_filename_r.c_str();
++    const std::string configFilePath = std::string("/etc/eclipse-score/lifecycle/") + f_filename_r.c_str();
+ 
+     std::ifstream infile;
+     infile.open(configFilePath, std::ios::binary | std::ios::in);

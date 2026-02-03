@@ -69,7 +69,7 @@ def create_startup_config(builder, pg_name, proc_index):
         create_environment_variable(
             builder,
             "CONFIG_PATH",
-            f"/etc/score-lifecycle-health/health_monitor_process_cfg_{proc_index}_{pg_name}.bin",
+            f"/etc/eclipse-score/lifecycle/health_monitor_process_cfg_{proc_index}_{pg_name}.bin",
         ),
     ]
     ProcessStartupConfig.StartEnvironmentVariableVector(builder, len(env_vars))

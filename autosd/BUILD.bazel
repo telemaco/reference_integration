@@ -56,7 +56,7 @@ rpm_package(
         "@score_lifecycle_health//examples/control_application:control_daemon",
         "@score_lifecycle_health//examples/control_application:lmcontrol",
     ],
-    config_dir = "/etc/score-lifecycle-health",
+    config_dir = "/etc/eclipse-score/lifecycle",
     configs = [
         "//:all_health_monitor_process_cfg_bins",
         "//:hm_demo_bin",

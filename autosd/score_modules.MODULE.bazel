@@ -101,6 +101,7 @@ git_override(
     patches = [
         "//patches/ipc_dropin:0001-fix-ipc_dropin-build.patch",
         "//patches/score_lifecycle_health:001-expose-fbs-files.patch",
+        "//patches/score_lifecycle_health:002-fix-config-path.patch",
     ],
     patch_strip = 1,
 )

@@ -40,6 +40,7 @@ content:
     - bluechi-ctl
     # score
     - lola-demo
+    - lifecycle-demo
 
   make_dirs:
     - path: /etc/containers/systemd/qm.container.d
@@ -74,6 +75,9 @@ content:
     # lola test script
     - path: /usr/bin/lola-ipc-test
       source_path: files/lola-ipc-test
+    # lifecycle service file
+    - path: /etc/systemd/system/lifecycle.service
+      source_path: files/lifecycle.service
   chmod_files:
     - path: /usr/bin/lola-ipc-test
       mode: "0755"
